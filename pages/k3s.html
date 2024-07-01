@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    #background-color: #f0f0f0;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 15%; /* Adjust padding relative to the viewport width */
+}
+
+
+nav#table-of-contents {
+    #background-color: #f0f0f0;
+    margin-bottom: 10rem;
+    #border-bottom: 1px solid #ccc;
+    line-height: 1.5rem;
+}
+
+nav#table-of-contents ul {
+    list-style: none;
+    margin: 1.25rem;
+    padding: 0;
+}
+
+nav#table-of-contents li {
+    margin-bottom: 0.8rem;
+}
+
+nav#table-of-contents a {
+    text-decoration: none;
+    color: #337ab7;
+}
+
+nav#table-of-contents a:hover {
+    color: #23527c;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+
+h2 {
+    margin-top: 0;
+}
+
+p , .bullet_points{
+    line-height: 1.5rem;
+}
+
+
+img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+    max-width: 50rem;
+    margin-top: 1.5rem;
+}
+
+
+figcaption {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline-flex;
+    background-color: #f0f0f0;
+    padding: 0.5em; 
+    margin: 0.3rem 0;
+    border: 1px solid #ccc;
+    overflow-x: auto; 
+    white-space: nowrap; 
+    max-width: 100%; 
+    box-sizing: border-box; 
+}
+
+#references {
+    font-size: 0.8em;
+}
+
+#references ol {
+    list-style: decimal;
+    margin: 0;
+    padding: 0;
+}
+
+#references li {
+    margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    /* Adjustments for screens below 600px */
+
+    main {
+        padding: 1rem 10%; /* Further decrease padding for smaller screens */
+    }
+
+    nav#table-of-contents {
+        margin-bottom: 5rem;
+    }
+
+    nav#table-of-contents ul {
+        margin: 0.3rem 0; /* Further adjust margin for smaller screens */
+    }
+
+    nav#table-of-contents li {
+        margin-bottom: 0.2rem; /* Further adjust margin for smaller screens */
+    }
+
+    img {
+        margin-top: 0.5rem; /* Further adjust margin for smaller screens */
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3, p {
+        font-size: 1rem;
+    }
+
+    .code {
+        font-size: 0.8rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>k3s Cluster</h1>
+    </header>
+    <main>
+        <nav id="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#heading-1">Steps to make a K3s Cluster with one Master and one Worker node</a></li>
+		    <ul>
+			<li><a href="#heading-1-sub-1">1. Install K3s on the Master Node</a></li>
+			<li><a href="#heading-1-sub-2">2. Retrieve the K3s Cluster Token</a></li>
+			<li><a href="#heading-1-sub-3">3. Install K3s on the Worker Node</a></li>
+            	    </ul>
+                <li><a href="#heading-2">Steps to add more Worker nodes to K3s Cluster (Optional)</a></li>
+		    <ul>
+			<li><a href="#heading-2-sub-1">1. Prepare the New Worker Node</a></li>
+			<li><a href="#heading-2-sub-2">2. Repeat the process of above Step-3</a></li>
+			<li><a href="#heading-2-sub-3">3. Verify Worker Node Join</a></li>
+            	    </ul>
+            </ul>
+        </nav>
+        <section>
+            <h2 id="heading-1">Steps to make a K3s Cluster with one Master and one Worker node</h2>
+	    <h3 id="heading-1-sub-1">1. Install K3s on the Master Node</h3>
+            <p>SSH into your master node and run the following command to install K3s:</p>
+	    <p class="code">curl -sfL https://get.k3s.io | sh -</p>
+	    <p>This command downloads and installs K3s along with its dependencies. After installation, K3s should automatically start running as a systemd service.</p>
+            <img src="img/img1.jpg" alt="Image 1"> <figcaption>Figure 1: Image 1 caption</figcaption>
+            <p>To check the status of K3s, you can use:</p>
+	    <p class="code">systemctl status k3s</p>
+            <img src="img/img2.jpg" alt="Image 2"> <figcaption>Figure 2: Image 2 caption</figcaption>
+
+
+	    <h3 id="heading-1-sub-2">2. Retrieve the K3s Cluster Token</h3>
+            <p>K3s generates a cluster token during installation that allows other nodes to join the cluster securely. Retrieve this token from the master node:</p>
+	    <p class="code">cat /var/lib/rancher/k3s/server/node-token</p>
+            <img src="img/img3.jpg" alt="Image 3"> <figcaption>Figure 3: Image 3 caption</figcaption>
+	    <p>Save the token securely, as you'll need it to join the worker node to the cluster.</p>
+            
+	    <h3 id="heading-1-sub-3">3. Install K3s on the Worker Node</h3>
+	    <p>SSH into your worker node and run the installation command, specifying the master node's address and the cluster token obtained in the previous step:</p>
+	    <p class="code">curl -sfL https://get.k3s.io | K3S_URL=https://<master-node-ip>:6443 K3S_TOKEN=<node-token> sh –</p>
+            <img src="img/img4.jpg" alt="Image 4"> <figcaption>Figure 4: Image 4 caption</figcaption>
+	    <p>Replace <master-node-ip> with the IP address or hostname of your master node, and <node-token> with the token retrieved earlier.</p>
+        </section>
+
+
+        <section>
+            <h2 id="heading-2">Steps to add more Worker nodes to K3s Cluster (Optional)</h2>
+	    <h3 id="heading-2-sub-1">1. Prepare the New Worker Node</h3>
+            <p>Ensure your new worker node meets the prerequisites:</p>
+	    <ul class="bullet_points">
+                <li>It should be a Linux-based machine (virtual or physical) with Ubuntu, Debian, CentOS, or Raspbian.</li>
+    	        <li>You should have SSH access to this node with sudo privileges.</li>
+	    </ul>
+            <img src="img/img5.jpg" alt="Image 5"> <figcaption>Figure 5: Image 5 caption</figcaption>
+           
+
+
+	    <h3 id="heading-2-sub-2">2. Repeat the process of above <a href="#heading-1-sub-3">Step-3</a></h3>
+            <img src="img/img6.jpg" alt="Image 6"> <figcaption>Figure 6: Image 6 caption</figcaption>
+            
+	    <h3 id="heading-2-sub-3">3. Verify Worker Node Join</h3>
+	    <p>Once the installation completes, switch back to the master node and verify that the new worker node has successfully joined the cluster:</p>
+	    <p class="code">kubectl get nodes</p>
+            <img src="img/img7.jpg" alt="Image 7"> <figcaption>Figure 7: Image 7 caption</figcaption>
+	    <p>The output showed all nodes in the cluster, including the new worker node (worker2).</p>
+        </section>
+
+
+        <section id="references">
+            <h2>References</h2>
+            <ol>
+                <li>Author, A. (2022). Book Title. Publisher.</li>
+                <li>Author, B. (2020). Article Title. Journal Title, 10(2), 12-15.</li>
+            </ol>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
