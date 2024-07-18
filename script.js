@@ -141,3 +141,56 @@ window.addEventListener('scroll', function() {
   });
  }
 });
+
+
+
+  const sectionsToAnimate = document.querySelectorAll('.main_container, .work, .skills-grid, .contact-content');
+
+  window.addEventListener('load', () => {
+    sectionsToAnimate.forEach(section => {
+      section.classList.add('animate');
+    });
+  });
+
+
+
+
+
+// Add dark mode functionality
+const darkModeBtn = document.getElementById('dark-mode-btn');
+const moonIcon = document.getElementById('moon-icon');
+const sunIcon = document.getElementById('sun-icon');
+
+darkModeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  
+  if (document.body.classList.contains('dark-mode')) {
+    moonIcon.style.display = 'none';
+    sunIcon.style.display = 'block';
+  } else {
+    moonIcon.style.display = 'block';
+    sunIcon.style.display = 'none';
+  }
+});
+
+
+
+
+
+// nav functionality
+const nav = document.querySelector('nav');
+let lastScrollPosition = 0;
+
+window.addEventListener('scroll', () => {
+  const currentScrollPosition = window.scrollY;
+
+  if (currentScrollPosition < lastScrollPosition) {
+    nav.classList.remove('scrolled');
+  } else {
+    if (currentScrollPosition > 200) { // adjust the scroll position threshold as needed
+      nav.classList.add('scrolled');
+    }
+  }
+
+  lastScrollPosition = currentScrollPosition;
+});
