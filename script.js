@@ -9,20 +9,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const skillsSection = document.getElementById('skills');
   const contactSection = document.getElementById('contact');
   
-  const logoLink = document.querySelector('.logo a'); // Assuming .logo is the class of your logo container
-  const menuCheckbox = document.getElementById('check'); // Assuming this is your checkbox for mobile menu
-  
+  const logoLink = document.querySelector('.logo a');
+  const menuCheckbox = document.getElementById('check');
+  const resumeButton = document.getElementById('resumeButton');
+  const darkModeBtn = document.getElementById('dark-mode-btn');
+  const moonIcon = document.getElementById('moon-icon');
+  const sunIcon = document.getElementById('sun-icon');
+
   // Function to add active class to a nav link
   function setActiveNavLink(link) {
-    // Remove active class from all nav links
     homeNavLink.classList.remove('active-nav');
     experienceNavLink.classList.remove('active-nav');
     skillsNavLink.classList.remove('active-nav');
     contactNavLink.classList.remove('active-nav');
-    // Add active class to the specified link
     link.classList.add('active-nav');
   }
-  
+
   // Function to scroll to a specific element smoothly
   function scrollToElement(element) {
     const elementTop = element.offsetTop;
@@ -31,106 +33,92 @@ document.addEventListener('DOMContentLoaded', function() {
       behavior: 'smooth'
     });
   }
-  
+
   // Function to close mobile menu when a nav link is clicked
   function closeMobileMenu() {
     if (menuCheckbox.checked) {
       menuCheckbox.checked = false;
     }
   }
-  
-  // Initially set Home nav link as active
-  setActiveNavLink(homeNavLink);
-  
+
   // Click event listener for Experience nav link
   experienceNavLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    // Set Experience nav link as active
+    event.preventDefault();
     setActiveNavLink(experienceNavLink);
-    // Scroll to the top of the experience section
     scrollToElement(experienceSection);
-    // Close mobile menu
     closeMobileMenu();
   });
-  
+
   // Click event listener for Skills nav link
   skillsNavLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    // Set Skills nav link as active
+    event.preventDefault();
     setActiveNavLink(skillsNavLink);
-    // Scroll to the top of the skills section
     scrollToElement(skillsSection);
-    // Close mobile menu
     closeMobileMenu();
   });
-  
+
   // Click event listener for Contact nav link
   contactNavLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    // Set Contact nav link as active
+    event.preventDefault();
     setActiveNavLink(contactNavLink);
-    // Scroll to the top of the contact section
     scrollToElement(contactSection);
-    // Close mobile menu
     closeMobileMenu();
   });
-  
+
   // Click event listener for Home nav link
   homeNavLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    // Set Home nav link as active
+    event.preventDefault();
     setActiveNavLink(homeNavLink);
-    // Scroll to the top of the page
     scrollToElement(document.body);
-    // Close mobile menu
     closeMobileMenu();
   });
-  
+
   // Click event listener for logo link
   logoLink.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    // Scroll to the top of the page
+    event.preventDefault();
     scrollToElement(document.body);
-    // Set Home nav link as active
     setActiveNavLink(homeNavLink);
-    // Close mobile menu
     closeMobileMenu();
   });
-  
-  // Scroll event listener to change active nav link based on section visibility
-window.addEventListener('scroll', function() {
-  const experienceSectionRect = experienceSection.getBoundingClientRect();
-  const skillsSectionRect = skillsSection.getBoundingClientRect();
-  const contactSectionRect = contactSection.getBoundingClientRect();
 
-  if (contactSectionRect.top <= 100 && contactSectionRect.bottom >= 0) {
-    setActiveNavLink(contactNavLink);
-  } else if (skillsSectionRect.top <= 100 && skillsSectionRect.bottom >= 0) {
-    setActiveNavLink(skillsNavLink);
-  } else if (experienceSectionRect.top <= 100 && experienceSectionRect.bottom >= 0) {
-    setActiveNavLink(experienceNavLink);
-  } else {
-    setActiveNavLink(homeNavLink);
-  }
-});
-
-
-  // Click event listener for Resume button (assuming it exists in your HTML)
-  const resumeButton = document.getElementById('resumeButton');
+  // Click event listener for Resume button
   if (resumeButton) {
     resumeButton.addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent default button behavior
-      // Replace 'your-resume-link-url' with the actual URL of your resume
+      event.preventDefault();
       window.open('https://drive.google.com/file/d/1jHGk2sdlQcAyn5iBSmTybw3hfNo1yAT3/view?usp=sharing', '_blank');
     });
-
-
-  function closeModal() {
-    var modal = document.getElementById('myModal');
-    modal.style.display = 'none';
-    document.getElementById('contact-form').reset();
   }
 
+  // Click event listener for dark mode button
+  darkModeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+      moonIcon.style.display = 'none';
+      sunIcon.style.display = 'block';
+    } else {
+      moonIcon.style.display = 'block';
+      sunIcon.style.display = 'none';
+    }
+  });
+
+  // Scroll event listener to change active nav link based on section visibility
+  window.addEventListener('scroll', function() {
+    const experienceSectionRect = experienceSection.getBoundingClientRect();
+    const skillsSectionRect = skillsSection.getBoundingClientRect();
+    const contactSectionRect = contactSection.getBoundingClientRect();
+
+    if (contactSectionRect.top <= 100 && contactSectionRect.bottom >= 0) {
+      setActiveNavLink(contactNavLink);
+    } else if (skillsSectionRect.top <= 100 && skillsSectionRect.bottom >= 0) {
+      setActiveNavLink(skillsNavLink);
+    } else if (experienceSectionRect.top <= 100 && experienceSectionRect.bottom >= 0) {
+      setActiveNavLink(experienceNavLink);
+    } else {
+      setActiveNavLink(homeNavLink);
+    }
+  });
+
+  // Function to handle modal closing and form submission
   document.getElementById('contact-form').addEventListener('submit', function(event) {
     event.preventDefault();
     var modal = document.getElementById('myModal');
@@ -139,58 +127,49 @@ window.addEventListener('scroll', function() {
       closeModal();
     }, 2000);
   });
- }
-});
 
+  function closeModal() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = 'none';
+    document.getElementById('contact-form').reset();
+  }
 
+  // Function to add 'animate' class to sections when they come into view
+  function animateOnScroll(entries, observer) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+      }
+    });
+  }
 
+  // Create an IntersectionObserver instance
+  const observer = new IntersectionObserver(animateOnScroll);
+
+  // Select sections to observe
   const sectionsToAnimate = document.querySelectorAll('.main_container, .work, .skills-grid, .contact-content');
 
-  window.addEventListener('load', () => {
-    sectionsToAnimate.forEach(section => {
-      section.classList.add('animate');
-    });
+  // Observe each section
+  sectionsToAnimate.forEach(section => {
+    observer.observe(section);
   });
 
+  // Function to manage navigation bar visibility based on scroll position
+  const nav = document.querySelector('nav');
+  let lastScrollPosition = 0;
 
+  window.addEventListener('scroll', () => {
+    const currentScrollPosition = window.scrollY;
 
-
-
-// Add dark mode functionality
-const darkModeBtn = document.getElementById('dark-mode-btn');
-const moonIcon = document.getElementById('moon-icon');
-const sunIcon = document.getElementById('sun-icon');
-
-darkModeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  
-  if (document.body.classList.contains('dark-mode')) {
-    moonIcon.style.display = 'none';
-    sunIcon.style.display = 'block';
-  } else {
-    moonIcon.style.display = 'block';
-    sunIcon.style.display = 'none';
-  }
-});
-
-
-
-
-
-// nav functionality
-const nav = document.querySelector('nav');
-let lastScrollPosition = 0;
-
-window.addEventListener('scroll', () => {
-  const currentScrollPosition = window.scrollY;
-
-  if (currentScrollPosition < lastScrollPosition) {
-    nav.classList.remove('scrolled');
-  } else {
-    if (currentScrollPosition > 200) { // adjust the scroll position threshold as needed
-      nav.classList.add('scrolled');
+    if (currentScrollPosition < lastScrollPosition) {
+      nav.classList.remove('scrolled');
+    } else {
+      if (currentScrollPosition > 200) {
+        nav.classList.add('scrolled');
+      }
     }
-  }
 
-  lastScrollPosition = currentScrollPosition;
+    lastScrollPosition = currentScrollPosition;
+  });
+
 });
