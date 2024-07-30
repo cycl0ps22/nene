@@ -108,17 +108,19 @@ nav ul li a:hover {
   color: var(--secondary-color);
 }
 
+.sun, .moon{
+  width: 20px;
+  height: 20px;
+}
+
 .sun{
- width: 20px;
- height: 20px;
- display: none;
+  display: none;
 }
 
-.moon{
- width: 20px;
- height: 20px;
+.dark-mode-btn{
+  background-color: transparent;
+  border: none;
 }
-
 
 .main_container {
   min-height: 100vh;
