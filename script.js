@@ -16,6 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const moonIcon = document.getElementById('moon-icon');
   const sunIcon = document.getElementById('sun-icon');
 
+  // Function to add active class to a nav link and scroll to section
+  function handleNavLinkClick(link, section) {
+    setActiveNavLink(link);
+    scrollToElement(section);
+    closeMobileMenu();
+  }
+
   // Function to add active class to a nav link
   function setActiveNavLink(link) {
     homeNavLink.classList.remove('active-nav');
@@ -41,97 +48,70 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Click event listener for Experience nav link
-  experienceNavLink.addEventListener('click', function(event) {
+  // Click event listeners for nav links
+  experienceNavLink.addEventListener('click', event => {
     event.preventDefault();
-    setActiveNavLink(experienceNavLink);
-    scrollToElement(experienceSection);
-    closeMobileMenu();
+    handleNavLinkClick(experienceNavLink, experienceSection);
   });
 
-  // Click event listener for Skills nav link
-  skillsNavLink.addEventListener('click', function(event) {
+  skillsNavLink.addEventListener('click', event => {
     event.preventDefault();
-    setActiveNavLink(skillsNavLink);
-    scrollToElement(skillsSection);
-    closeMobileMenu();
+    handleNavLinkClick(skillsNavLink, skillsSection);
   });
 
-  // Click event listener for Contact nav link
-  contactNavLink.addEventListener('click', function(event) {
+  contactNavLink.addEventListener('click', event => {
     event.preventDefault();
-    setActiveNavLink(contactNavLink);
-    scrollToElement(contactSection);
-    closeMobileMenu();
+    handleNavLinkClick(contactNavLink, contactSection);
   });
 
-  // Click event listener for Home nav link
-  homeNavLink.addEventListener('click', function(event) {
+  homeNavLink.addEventListener('click', event => {
     event.preventDefault();
-    setActiveNavLink(homeNavLink);
-    scrollToElement(document.body);
-    closeMobileMenu();
+    handleNavLinkClick(homeNavLink, document.body);
   });
 
-  // Click event listener for logo link
-  logoLink.addEventListener('click', function(event) {
+  logoLink.addEventListener('click', event => {
     event.preventDefault();
-    scrollToElement(document.body);
-    setActiveNavLink(homeNavLink);
-    closeMobileMenu();
+    handleNavLinkClick(homeNavLink, document.body);
   });
 
   // Click event listener for Resume button
   if (resumeButton) {
-    resumeButton.addEventListener('click', function(event) {
+    resumeButton.addEventListener('click', event => {
       event.preventDefault();
       window.open('https://drive.google.com/file/d/1jHGk2sdlQcAyn5iBSmTybw3hfNo1yAT3/view?usp=sharing', '_blank');
     });
   }
 
   // Click event listener for dark mode button
-  darkModeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    if (document.body.classList.contains('dark-mode')) {
-      moonIcon.style.display = 'none';
-      sunIcon.style.display = 'block';
-    } else {
-      moonIcon.style.display = 'block';
-      sunIcon.style.display = 'none';
-    }
-  });
+  if (darkModeBtn) {
+    darkModeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      moonIcon.style.display = document.body.classList.contains('dark-mode') ? 'none' : 'block';
+      sunIcon.style.display = document.body.classList.contains('dark-mode') ? 'block' : 'none';
+    });
+  }
 
-  // Scroll event listener to change active nav link based on section visibility
-  window.addEventListener('scroll', function() {
-    const experienceSectionRect = experienceSection.getBoundingClientRect();
-    const skillsSectionRect = skillsSection.getBoundingClientRect();
-    const contactSectionRect = contactSection.getBoundingClientRect();
-
-    if (contactSectionRect.top <= 100 && contactSectionRect.bottom >= 0) {
-      setActiveNavLink(contactNavLink);
-    } else if (skillsSectionRect.top <= 100 && skillsSectionRect.bottom >= 0) {
-      setActiveNavLink(skillsNavLink);
-    } else if (experienceSectionRect.top <= 100 && experienceSectionRect.bottom >= 0) {
-      setActiveNavLink(experienceNavLink);
-    } else {
-      setActiveNavLink(homeNavLink);
-    }
-  });
-
-  // Function to handle modal closing and form submission
-  document.getElementById('contact-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    var modal = document.getElementById('myModal');
-    modal.style.display = 'block';
-    setTimeout(function() {
-      closeModal();
-    }, 2000);
-  });
+  // Modal handling
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const modal = document.getElementById('myModal');
+      if (modal) {
+        modal.style.display = 'block';
+        setTimeout(() => closeModal(), 2000);
+      }
+    });
+  }
 
   function closeModal() {
-    var modal = document.getElementById('myModal');
-    modal.style.display = 'none';
-    document.getElementById('contact-form').reset();
+    const modal = document.getElementById('myModal');
+    if (modal) {
+      modal.style.display = 'none';
+      if (contactForm) {
+        contactForm.reset();
+      }
+    }
   }
 
   // Function to add 'animate' class to sections when they come into view
@@ -148,11 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Select sections to observe
   const sectionsToAnimate = document.querySelectorAll('.main_container, .work, .skills-grid, .contact-content');
-
-  // Observe each section
-  sectionsToAnimate.forEach(section => {
-    observer.observe(section);
-  });
+  sectionsToAnimate.forEach(section => observer.observe(section));
 
   // Function to manage navigation bar visibility based on scroll position
   const nav = document.querySelector('nav');
@@ -160,16 +136,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
   window.addEventListener('scroll', () => {
     const currentScrollPosition = window.scrollY;
-
-    if (currentScrollPosition < lastScrollPosition) {
-      nav.classList.remove('scrolled');
-    } else {
-      if (currentScrollPosition > 200) {
-        nav.classList.add('scrolled');
+    if (nav) {
+      if (currentScrollPosition < lastScrollPosition) {
+        nav.classList.remove('scrolled');
+      } else {
+        if (currentScrollPosition > 200) {
+          nav.classList.add('scrolled');
+        }
       }
     }
-
     lastScrollPosition = currentScrollPosition;
-  });
 
+    // Update active nav link based on section visibility
+    const experienceSectionRect = experienceSection.getBoundingClientRect();
+    const skillsSectionRect = skillsSection.getBoundingClientRect();
+    const contactSectionRect = contactSection.getBoundingClientRect();
+
+    if (contactSectionRect.top <= 100 && contactSectionRect.bottom >= 0) {
+      setActiveNavLink(contactNavLink);
+    } else if (skillsSectionRect.top <= 100 && skillsSectionRect.bottom >= 0) {
+      setActiveNavLink(skillsNavLink);
+    } else if (experienceSectionRect.top <= 100 && experienceSectionRect.bottom >= 0) {
+      setActiveNavLink(experienceNavLink);
+    } else {
+      setActiveNavLink(homeNavLink);
+    }
+  });
 });
