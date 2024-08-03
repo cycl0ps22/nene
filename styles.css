@@ -624,7 +624,7 @@ footer {
 
 
 /****** Responsive ******/
-@media (width < 750px) {
+@media (max-width: 750px) {
 nav .checkbox {
     display: block;
 }
