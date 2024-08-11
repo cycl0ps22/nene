@@ -803,3 +803,24 @@ footer {
 .dark-mode a:hover {
   color: #ccc;
 }
+
+
+
+@media (pointer: coarse) {
+    .social-icons ul li a:hover {
+        transform: none;
+    }
+
+    .nav ul li a:hover,
+    .resume_btn:hover,
+    .company a:hover,
+    .button[type="submit"]:hover {
+	      color: initial;
+         background-color: initial;
+    }
+
+    .contact-info a:hover {
+        text-decoration: none;
+    }
+
+}
